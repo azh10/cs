@@ -25,7 +25,7 @@ public class CS2ProgrammingWeek5
 		return( "Ansag,Ashton,as3244125");
 	}
 
-	//	Problem #1
+	/*	Problem #1
 	//	Given an array of ints, is it possible to choose a group 
 	//	of some of the ints, such that the group sums to the given 
 	//	target? This is a classic backtracking recursion problem. 
@@ -41,7 +41,6 @@ public class CS2ProgrammingWeek5
 	//	groupSumsTarget(0, {2, 4, 8}, 14) true
 	//	groupSumsTarget(0, {2, 4, 8}, 9) false
 
-	/**
 	 * 
 	 * @param start, nums, target
 	 * 		int start tells you where to start in the array nums
@@ -55,12 +54,10 @@ public class CS2ProgrammingWeek5
 	static boolean groupSumsTarget(int start, int[] nums, int target) 
 	{
 		// base cases
-		// need of the array
+		// end of the array
 		if(start >= nums.length) return false;
 		// found target
 		if(nums[start] == target) return true;
-		// the target cannot possible be found anymore stop
-		if(nums[start] > target) return false;
 
 		// trace forward to find the target
 		if(groupSumsTarget(start +1, nums, target)) return true;
@@ -95,10 +92,23 @@ public class CS2ProgrammingWeek5
 	 */
 	static boolean groupSumsTarget6(int start, int[] nums, int target) 
 	{
+		// base cases
+		// end of the array
+		if(start >= nums.length) return false;
+		// found target
+		if(nums[start] == target) return true;
+
+		// trace forward to find the target
+		if(groupSumsTarget(start +1, nums, target)) return true;
+		
+		// then trace to find the sum that matches the target
+		if(groupSumsTarget(start +1, nums, target -nums[start])) return true;
+
+		// the target was not found
 		return false;
 	}	
 
-	//	Problem #3
+	/*	Problem #3
 	//	Given an array of ints, is it possible to choose a group of some 
 	//	of the ints, such that the group sums to the given target with this 
 	//	additional constraint: If a value in the array is chosen to be in 
@@ -109,7 +119,6 @@ public class CS2ProgrammingWeek5
 	//	groupSumsTargetNoAdj(0, {2, 5, 10, 4}, 14) → false
 	//	groupSumsTargetNoAdj(0, {2, 5, 10, 4}, 7) → false
 
-	/**
 	 * 
 	 * @param start, nums, target
 	 * 		int start tells you where to start in the array nums
@@ -127,7 +136,7 @@ public class CS2ProgrammingWeek5
 		return false;
 	}	
 
-	//	Problem #4
+	/*	Problem #4
 	//	Given an array of ints, is it possible to choose a group of some 
 	//	of the ints, such that the group sums to the given target with these 
 	//	additional constraints: all multiples of 5 in the array must be 
@@ -138,7 +147,7 @@ public class CS2ProgrammingWeek5
 	//	groupSumsTarget5(0, {2, 5, 10, 4}, 17) → true
 	//	groupSumsTarget5(0, {2, 5, 10, 4}, 12) → false
 
-	/**
+	
 	 * 
 	 * @param start, nums, target
 	 * 		int start tells you where to start in the array nums
@@ -155,7 +164,7 @@ public class CS2ProgrammingWeek5
 		return false;
 	}
 
-	//	Problem #5
+	/*	Problem #5
 	//	Given an array of ints, is it possible to choose a group of some of 
 	//	the ints, such that the group sums to the given target, with this 
 	//	additional constraint: if there are numbers in the array that are adjacent 
@@ -164,11 +173,10 @@ public class CS2ProgrammingWeek5
 	//	three 2's in the middle must be chosen or not, all as a group. (one loop 
 	//	can be used to find the extent of the identical values). 
 
-	//	groupSumsTargetClump(0, {2, 4, 8}, 10) → true
-	//	groupSumsTargetClump(0, {1, 2, 4, 8, 1}, 14) → true
-	//	groupSumsTargetClump(0, {2, 4, 4, 8}, 14) → false	
+	//	groupSumsTargetClump(0, {2, 4, 8}, 10) true
+	//	groupSumsTargetClump(0, {1, 2, 4, 8, 1}, 14) true
+	//	groupSumsTargetClump(0, {2, 4, 4, 8}, 14) false	
 
-	/**
 	 * 
 	 * @param start, nums, target
 	 * 		int start tells you where to start in the array nums
@@ -181,22 +189,47 @@ public class CS2ProgrammingWeek5
 	 */
 	static boolean groupSumsTargetClump(int start, int[] nums, int target) 
 	{
+		// base cases
+		// end of the array
+		if(start >= nums.length) return false;
+		// found target
+		if(nums[start] == target){ 
+			if( start < nums.length )
+				return ( nums[start] == nums[start] ) ? ;
+			return true;
+		}
+		
+		int adjust=1;
+		if( start < nums.length -1 && nums[start] == nums[start +1] ){
+			
+			
+			for( int i=start; i < nums.length; i++){
+				if( nums[i] == nums[start] )
+					adjust++;
+			}
+			
+		}
 
+		// trace forward to find the target
+		if(groupSumsTarget(start +adjust, nums, target)) return true;
+		// then trace to find the sum that matches the target
+		if(groupSumsTarget(start +adjust, nums, target - (nums[start] * adjust))) return true;
+
+		// the target was not found
 		return false;
 	}
 
-	//	Problem #6
+	/*	Problem #6
 	//	Given an array of ints, is it possible to divide the ints into two 
 	//	groups, so that the sums of the two groups are the same. Every int must 
-	//	be in one group or the other. Write a recursive helper method that takes 
+	//	be in one group or the other. **** Write a recursive helper method that takes 
 	//	whatever arguments you like, and make the initial call to your recursive 
-	//	helper from splitArray(). (No loops needed.)    
+	//	helper from splitArray(). (No loops needed.) ****    
 
-	//	divideArray({2, 2}) → true
-	//	divideArray({2, 3}) → false
-	//	divideArray({5, 2, 3}) → true
+	//	divideArray({2, 2})  true
+	//	divideArray({2, 3}) false
+	//	divideArray({5, 2, 3}) true
 
-	/**
 	 * 
 	 * @param nums
 	 * 		int[] nums is the given array
@@ -205,13 +238,46 @@ public class CS2ProgrammingWeek5
 	 * 		returns true if the array can be divided so that the constraints are met
 	 * 		returns false if the array cannot be divided so that the constraints are met
 	 */
+	// why did I need this method?? it says use splitArray to call the helper so I called 
+	//     the splitArray here and had it call the helper
 	static boolean divideArray(int[] nums) 
 	{
-
-		return false;
+		return splitArray( nums );
 	}
+	static boolean splitArray(int array[]){
+		
+		// base case
+		// 1 or less items cannot be split
+		if( array.length <= 1) return false;
+		
+		// it said no loop so this is instead of a loop to the rightGroup
+		int rightGroup[] = new int[array.length -1];
+        System.arraycopy(array, 1, rightGroup, 0, rightGroup.length);
+        
+        // just for clarity the first element is always the whole left side
+        int leftGroup = array[0];
 
-	//	Problem #7
+        // if the helper found a working match return true
+        if( helperSix(0, rightGroup, leftGroup) ) return true;
+		
+        // makes the first element of the right the entire left grouping
+        rightGroup[0] += leftGroup;
+        
+        // keep trying with recursion
+		return splitArray(rightGroup);
+	}
+	static boolean helperSix(int start, int nums[], int target){
+		
+		// base case
+		// out of elements now return if it matches the required target
+		if( start >= nums.length ) return ( target == 0 ) ? true : false;
+
+		// keep adding till all elements added
+		return helperSix( start +1, nums, target -nums[start] );
+	}
+	
+
+	/*	Problem #7
 	//	Given an array of ints, is it possible to divide the ints into two groups, 
 	//	so that the sum of one group is a multiple of 10, and the sum of the 
 	//	other group is odd. Every int must be in one group or the other. Write 
@@ -223,7 +289,6 @@ public class CS2ProgrammingWeek5
 	//	oddDivide10({5, 5, 6}) → false
 	//	oddDivide10({5, 5, 6, 1}) → true
 
-	/**
 	 * 
 	 * @param nums
 	 * 		int[] nums is the given array
@@ -232,24 +297,64 @@ public class CS2ProgrammingWeek5
 	 * 		returns true if the array can be divided so that the constraints are met
 	 * 		returns false if the array cannot be divided so that the constraints are met 
 	 */
+	// As with 6 I think the names were not updated in the comments however I will follow the comment
+	
+	
 	static boolean oddDivide10(int[] nums) 
 	{
+		return splitOdd10( nums );
+	}
+	static boolean splitOdd10(int array[]){
 
-		return false;
+		// base case
+		// 1 or less items cannot be split
+		if( array.length <= 1 ) return false;
+		
+		// it said no loop so this is instead of a loop to the rightGroup
+		int rightGroup[] = new int[array.length -1];
+        System.arraycopy( array, 1, rightGroup, 0, rightGroup.length );
+        
+        // just for clarity the first element is always the whole left side
+        int leftGroup = array[0];
+
+        // if the helper found a working match return true
+        if( helperSeven(0, rightGroup, leftGroup, 0) ) return true;
+		
+        // makes the first element of the right the entire left grouping
+        rightGroup[0] += leftGroup;
+        
+        // keep trying with recursion
+		return splitOdd10(rightGroup);
+	}
+	static boolean helperSeven(int start, int nums[], int leftSum, int rightSum) {
+		
+		// base case
+		// out of elements now test requirements
+		if( start >= nums.length ){
+			
+			// test (multiple of 10)  &&  test (odd)
+			if( (leftSum  % 10 == 0)  && (rightSum % 2 == 1) ) return true;
+			if( (rightSum % 10 == 0)  && (leftSum  % 2 == 1) ) return true;
+			
+			// else the requirements not met
+			return false;
+		}
+
+		// keep adding till rightSum is calculated
+		return helperSeven( start +1, nums, leftSum, rightSum +nums[start]);
 	}
 
-	//	Problem #8
+	/* Problem #8
 	//	Given an array of ints, is it possible to divide the ints into 
 	//	two groups, so that the sum of the two groups is the same, with 
 	//	these constraints: all the values that are multiple of 5 must 
 	//	be in one group, and all the values that are a multiple of 3 
 	//	(and not a multiple of 5) must be in the other. (No loops needed.)  
 
-	//	divide53({1,1}) → true
-	//	divide53({1, 1, 1}) → false
-	//	divide53({2, 4, 2}) → true
+	//	divide53({1,1}) true
+	//	divide53({1, 1, 1}) false
+	//	divide53({2, 4, 2}) true
 
-	/**
 	 * 
 	 * @param nums
 	 * 		int[] nums is the given array
@@ -260,7 +365,18 @@ public class CS2ProgrammingWeek5
 	 */
 	static boolean divide53(int[] nums) 
 	{
+		// base cases
+		// end of the array
+		if( 1 >= nums.length) return false;
+		// found target
+		if( true ) return true;
 
+		// trace forward to find the target
+		//if(groupSumsTarget(start +1, nums, target)) return true;
+		// then trace to find the sum that matches the target
+		//if(groupSumsTarget(start +1, nums, target -nums[start])) return true;
+
+		// the target was not found
 		return false;
 	}
 
@@ -272,8 +388,10 @@ public class CS2ProgrammingWeek5
 
 	public static void main(String[] args)
 	{
-		int arr[] = {2, 4, 5, 6, 7, 8};
-		System.out.println(groupSumsTarget6(0, arr, 10));
+		int arr[] = {5,5,7,10};
+		//System.out.println(groupSumsTarget6(0, arr, 7));
+		System.out.println( arr.length );
+
 	}
 
 }
