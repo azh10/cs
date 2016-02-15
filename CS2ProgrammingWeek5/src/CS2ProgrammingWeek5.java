@@ -22,7 +22,7 @@ public class CS2ProgrammingWeek5
 	 */
 	static String GetNameAndPID()
 	{
-		return( "Ansag,Ashton,as3244125");
+		return( "Ansag,Ashton,3244125");
 	}
 
 	/*	Problem #1
@@ -68,7 +68,7 @@ public class CS2ProgrammingWeek5
 		return false;
 	}
 
-	//	Problem #2
+	/*	Problem #2
 	//	Given an array of ints, is it possible to choose a group of 
 	//	some of the ints, beginning at the start index, such that 
 	//	the group sums to the given target? However, with the additional 
@@ -78,7 +78,6 @@ public class CS2ProgrammingWeek5
 	//	groupSumsTarget6(0, {5, 6, 2}, 9) false
 	//	groupSumsTarget6(0, {5, 6, 2}, 7) false
 
-	/**
 	 * 
 	 * @param start, nums, target
 	 * 		int start tells you where to start in the array nums
@@ -92,21 +91,22 @@ public class CS2ProgrammingWeek5
 	 */
 	static boolean groupSumsTarget6(int start, int[] nums, int target) 
 	{
-		// base cases
-		// end of the array
-		if(start >= nums.length) return false;
-		// found target
-		if(nums[start] == target) return true;
-
-		// trace forward to find the target
-		if(groupSumsTarget(start +1, nums, target)) return true;
+		// get number of 5s and use that offset and find if the sum can be made
+		return groupSumsTarget( start,nums, (target-(lookForHelper6(start, nums) *6)) );
+	}
+	static int lookForHelper6(int start, int nums[]){
 		
-		// then trace to find the sum that matches the target
-		if(groupSumsTarget(start +1, nums, target -nums[start])) return true;
-
-		// the target was not found
-		return false;
-	}	
+		// base case
+		// nothing left to check
+		if( start >= nums.length ) return 0;
+		// do not count these again when searching
+		if( nums[start]==6 ){
+			nums[start]=0;
+			return 1 + lookForHelper6(start +1, nums);
+		}
+		// do recursion
+		return 0 + lookForHelper6(start +1, nums);		
+	}
 
 	/*	Problem #3
 	//	Given an array of ints, is it possible to choose a group of some 
@@ -132,7 +132,18 @@ public class CS2ProgrammingWeek5
 	 */
 	static boolean groupSumsTargetNoAdj(int start, int[] nums, int target) 
 	{
-
+		// base cases
+		// end of the array
+		if(start >= nums.length) return false;
+		// found target
+		if(nums[start] == target) return true;
+	
+		// trace forward to find the target
+		if(groupSumsTargetNoAdj(start +1, nums, target)) return true;
+		// then trace to find the sum that matches the target
+		if(groupSumsTargetNoAdj(start +2, nums, target -nums[start])) return true;
+	
+		// the target was not found
 		return false;
 	}	
 
@@ -160,10 +171,26 @@ public class CS2ProgrammingWeek5
 	 */
 	static boolean groupSumsTarget5(int start, int[] nums, int target) 
 	{
-
-		return false;
+		// get number of 5s and use that offset and find if the sum can be made
+		return groupSumsTarget( start,nums, (target-(lookForHelper5(start, nums) *5)) );
 	}
-
+	static int lookForHelper5(int start, int nums[]){
+		
+		// base case
+		// nothing left to check
+		if( start >= nums.length ) return 0;
+		// do not count these again when searching
+		if( nums[start]==5 ){
+			nums[start]=0;
+			// this is the 1 after a 5 condition
+			if( start < nums.length -1 && nums[start]==1)
+				nums[start +1]=0;
+			return 1 + lookForHelper5(start +1, nums);
+		}
+		// do recursion
+		return 0 + lookForHelper5(start +1, nums);		
+	}
+	
 	/*	Problem #5
 	//	Given an array of ints, is it possible to choose a group of some of 
 	//	the ints, such that the group sums to the given target, with this 
@@ -192,28 +219,26 @@ public class CS2ProgrammingWeek5
 		// base cases
 		// end of the array
 		if(start >= nums.length) return false;
-		// found target
+		// found target and check for a repeat
 		if(nums[start] == target){ 
-			if( start < nums.length )
-				return ( nums[start] == nums[start] ) ? ;
+			if( start < nums.length -1 && nums[start +1] == nums[start] ) return false;
 			return true;
 		}
 		
+		// count adjacentecies
 		int adjust=1;
 		if( start < nums.length -1 && nums[start] == nums[start +1] ){
-			
-			
-			for( int i=start; i < nums.length; i++){
-				if( nums[i] == nums[start] )
-					adjust++;
+			for( int i=start +1; i < nums.length; i++){
+				if( nums[i] == nums[start] ) adjust++;
 			}
-			
 		}
-
+		
 		// trace forward to find the target
-		if(groupSumsTarget(start +adjust, nums, target)) return true;
+		if(groupSumsTargetClump(start +adjust, nums, target)) 
+			return true;
 		// then trace to find the sum that matches the target
-		if(groupSumsTarget(start +adjust, nums, target - (nums[start] * adjust))) return true;
+		if(groupSumsTargetClump(start +adjust, nums, target - (nums[start] * adjust))) 
+			return true;
 
 		// the target was not found
 		return false;
@@ -365,19 +390,48 @@ public class CS2ProgrammingWeek5
 	 */
 	static boolean divide53(int[] nums) 
 	{
-		// base cases
-		// end of the array
-		if( 1 >= nums.length) return false;
-		// found target
-		if( true ) return true;
-
-		// trace forward to find the target
-		//if(groupSumsTarget(start +1, nums, target)) return true;
-		// then trace to find the sum that matches the target
-		//if(groupSumsTarget(start +1, nums, target -nums[start])) return true;
-
-		// the target was not found
-		return false;
+		// find the required numbers
+		int larger = lookForHelper53(0, nums, 5);
+		int smaller = lookForHelper53(0, nums, 3);
+		
+		// the helper needs to know which is smaller so switch if needed
+		if( smaller > larger ){
+			int temp = smaller;
+			smaller = larger;
+			larger = temp;
+		}
+		
+		return helper53(0, nums, larger, smaller );
+	}
+	// finds if there is a way to make a matching half 
+	static boolean helper53(int start, int nums[], int larger, int smaller){
+		
+		// base case
+		// out of array
+		if( start >= nums.length) return false;
+		// adding to the larger cannot make the smaller so stop
+		if( larger < smaller ) return false;
+		
+		// if a matching half can be found return true
+		if( groupSumsTarget( start, nums, larger - smaller ) ) return true;
+		
+		// else do more recursion
+		return helper53( start +1, nums, larger + nums[start], smaller );
+	}
+	// counts the required elements
+	static int lookForHelper53(int start, int nums[], int look){
+		
+		// base case
+		// nothing left to check
+		if( start >= nums.length ) return 0;
+		// do not count these again when searching
+		if( nums[start]%look == 0 ){
+			int temp = nums[start];
+			nums[start]=0;
+			return temp + lookForHelper53(start +1, nums, look);
+		}
+		// do recursion
+		return 0 + lookForHelper53(start +1, nums, look);		
 	}
 
 	///////////////////////////////////////////
@@ -388,10 +442,6 @@ public class CS2ProgrammingWeek5
 
 	public static void main(String[] args)
 	{
-		int arr[] = {5,5,7,10};
-		//System.out.println(groupSumsTarget6(0, arr, 7));
-		System.out.println( arr.length );
-
 	}
 
 }
