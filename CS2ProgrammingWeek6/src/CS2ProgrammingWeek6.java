@@ -60,8 +60,9 @@ public class CS2ProgrammingWeek6
 			return ( str.charAt(0)=='y' || str.charAt(0)=='z' )? 1:0;
 		
 		// if the next letter is not a letter check for y or z
-		if( !Character.isLetter(str.charAt(1)) && (str.charAt(0)=='y' || str.charAt(0)=='z') )
-			return 1 + wordEndYZ( str.substring(1) );
+		if( !Character.isLetter(str.charAt(1)) )
+			if((str.charAt(0)=='y' || str.charAt(0)=='z') )
+				return 1 + wordEndYZ( str.substring(1) );
 		
 		// else it is not end of word with y or z
 		return 0 + wordEndYZ( str.substring(1) );
@@ -405,10 +406,6 @@ public class CS2ProgrammingWeek6
 
 	public static void main(String[] args)
 	{
-		String str = new String("164");
-		int temp = 0;
-		
-		
 		System.out.println( wordEndYZ( "i'am a happy happy man." ));
 		System.out.println( removeFromBase( "appple", "pp") );
 		System.out.println( equalAppearance( "it is not a" ) );
