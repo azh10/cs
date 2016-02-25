@@ -1,0 +1,77 @@
+ import javax.imageio.ImageIO;
+
+public class Main extends Applet implements MouseListener {
+
+	BufferedImage shape;
+	MediaTracker tracker = new MediaTracker( this );
+
+	public void init(){
+		addMouseListener( this );
+		setSize( 1020, 700 );
+		
+		try{
+			shape = ImageIO.read( Main.class.getResourceAsStream("untitled.png"));
+			tracker.addImage( shape, 100 );
+			tracker.waitForAll();
+		}catch(Exception el){
+			
+		}
+	}
+	
+	public void paint( Graphics canvas ){
+		
+		canvas.drawImage( shape, 100, 100, null );
+	}
+
+	
+	public void mousePressed( MouseEvent arg0){
+		
+		
+	}
+	
+	//
+	
+	dorecrusivefill( x y ){
+		x -= testshapex;
+		y -= testshapey;
+		startcolor = getPixel(x,y) | 0xff000000;
+		Graphics canvas = getGraphics();
+		canvas.setColor( seletedColor );
+		int w = shape.getwidht();
+		int h = shape.getHeight();
+		
+		if()
+			
+		setPixel( x+testshapex, y + testshapey);
+		setPixel( x+testshapex, y + testshapey);
+		
+	}
+	
+	doff
+	
+	ff(){
+		if things
+		
+		
+		
+		
+			int xx = x;
+		while( xx < shape,x && getPixel xx y == startcolor ){
+
+			setPixel canvas;
+
+			// right
+
+		}
+		while( xx < shape,x && getPixel xx y == startcolor ){
+
+			setPixel canvas;
+
+			// left
+
+		}
+		
+		for ( xx)
+	}
+
+}
