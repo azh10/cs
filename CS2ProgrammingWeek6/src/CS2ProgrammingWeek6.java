@@ -406,16 +406,7 @@ public class CS2ProgrammingWeek6
 
 	public static void main(String[] args)
 	{
-		System.out.println( wordEndYZ( "i'am a happy happy man." ));
-		System.out.println( removeFromBase( "appple", "pp") );
-		System.out.println( equalAppearance( "it is not a" ) );
-		System.out.println( gisHappy( "The doggie is good" ) );
-		System.out.println( numberOfTriples( "the AAA ruined my life" ) );
-		System.out.println( addUpDigits( "I am 400 years old." ) );
-		System.out.println( beginningAndEndOfString( "people suck other people" ) );
-		System.out.println( beginningMirrorEnd( "racecar" ) );
-		System.out.println( largestBlock( "furry furrrries aaaaaare furry...." ) );
-		System.out.println( addUpNumbers( "I am 400 years old -2016" ) );
+		
 	}
 
 }
