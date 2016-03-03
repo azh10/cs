@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 public class Floodfill extends Applet implements MouseListener
 {
 	Color m_objSelectedColor = Color.blue;
-	int m_nSelectedColor = 0xff0000ff;
+	int fillColor = 0xff0000ff;
 	BufferedImage m_objShape;
 	MediaTracker tracker = new MediaTracker(this);
 	
@@ -103,14 +103,14 @@ public class Floodfill extends Applet implements MouseListener
 	{
 		x -= m_nTestShapeX;
 		y -= m_nTestShapeY;
-		m_nStartColor = GetPixel(x,y) | 0xff000000;
+		startColor = GetPixel(x,y) | 0xff000000;
 		Graphics canvas = getGraphics();
 		canvas.setColor( m_objSelectedColor );
 		
 		int w = m_objShape.getWidth();
 		int h = m_objShape.getHeight();
 
-		if( m_nStartColor == m_nSelectedColor)
+		if( startColor == fillColor)
 		{
 			return;
 		}
@@ -120,30 +120,31 @@ public class Floodfill extends Applet implements MouseListener
 	
 	void RecursiveFill( int x, int y, int w, int h, Graphics canvas )
 	{
-		if( GetPixel(x,y) != m_nStartColor ) return;
-
-		SetPixel( x,y, m_nSelectedColor ); 
+		if( x > w || y > h || x < 0 || y < 0 ) return;
+		if( GetPixel(x,y) != startColor ) return;		
+		if( startColor == fillColor ) return;
+		
+		SetPixel( x,y, fillColor ); 
 		repaint();
-		RecursiveFill( x-1,y, m_nStartColor, m_nSelectedColor, canvas );
-		RecursiveFill( x+1,y, m_nStartColor, m_nSelectedColor, canvas );
-		RecursiveFill( x,y-1, m_nStartColor, m_nSelectedColor, canvas );
-		RecursiveFill( x,y+1, m_nStartColor, m_nSelectedColor, canvas );
-
+		RecursiveFill( x-1,y, startColor, fillColor, canvas );
+		RecursiveFill( x+1,y, startColor, fillColor, canvas );
+		RecursiveFill( x,y-1, startColor, fillColor, canvas );
+		RecursiveFill( x,y+1, startColor, fillColor, canvas );
 	}
 	
-	int m_nStartX, m_nStartY, m_nStartColor;
+	int m_nStartX, m_nStartY, startColor;
 	void DoFloodFill( int x, int y )
 	{
 		x -= m_nTestShapeX;
 		y -= m_nTestShapeY;
-		m_nStartColor = GetPixel(x,y) | 0xff000000;
+		startColor = GetPixel(x,y) | 0xff000000;
 		Graphics canvas = getGraphics();
 		canvas.setColor( m_objSelectedColor );
 		
 		int w = m_objShape.getWidth();
 		int h = m_objShape.getHeight();
 
-		if( m_nStartColor == m_nSelectedColor)
+		if( startColor == fillColor)
 		{
 			return;
 		}
@@ -153,31 +154,31 @@ public class Floodfill extends Applet implements MouseListener
 	
 	void FloodFill( int x, int y, int w, int h, Graphics canvas )
 	{
-		
-		if( GetPixel(x,y) != m_nStartColor ) return;
+		if( xx<w && xx>0 && y<h && y>0 ) return;
+		if( GetPixel(x,y) != startColor ) return;
 
-		SetPixel( x,y, m_nSelectedColor ); 
+		SetPixel( x,y, fillColor ); 
 		repaint();
 		
 		int xx = x;
 		int left=x, right=x;
 		
-		while( GetPixel(xx, y) == m_nStartColor ){	
-			SetPixel( xx,y, m_nSelectedColor );
+		while( (xx<w && xx>0 && y<h && y>0) && GetPixel(xx, y) == startColor ){	
+			SetPixel( xx,y, fillColor );
 			x++;
 			right = xx;
 		}	
 		
 		xx = x-1;
-		while( GetPixel(xx, y) == m_nStartColor ){
-			SetPixel(xx, y, m_nSelectedColor);
+		while( (xx<w && xx>0 && y<h && y>0) && GetPixel(xx, y) == startColor ){
+			SetPixel(xx, y, fillColor);
 			x--;
 			left=xx;
 		}
-		
+		repaint();
 		for( xx=left ; xx<right; xx++ ){
-			FloodFill( xx,y-1, m_nStartColor, m_nSelectedColor, canvas );
-			FloodFill( xx,y+1, m_nStartColor, m_nSelectedColor, canvas );
+			FloodFill( xx,y-1, startColor, fillColor, canvas );
+			FloodFill( xx,y+1, startColor, fillColor, canvas );
 		}
 
 	/*	repaint();
@@ -200,7 +201,8 @@ public class Floodfill extends Applet implements MouseListener
 
 		count xx from left to right 
 		Fill xx y - 1 fc sc 
-		Fill xx y + 1 fc sc*/ 		
+		Fill xx y + 1 fc sc
+	*/ 		
 	}
 
 	@Override
@@ -230,7 +232,7 @@ public class Floodfill extends Applet implements MouseListener
 				if( nColorIndex >= 0 && nColorIndex <= 7 )
 				{
 					m_objSelectedColor = m_Colors[nColorIndex];
-					m_nSelectedColor = m_Colors[nColorIndex].getRGB();
+					fillColor = m_Colors[nColorIndex].getRGB();
 				}
 			}
 			
