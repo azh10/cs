@@ -11,7 +11,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Floodfill extends Applet implements MouseListener
+
+
+/*<applet code=FloodFill.java width=1000 height=400>
+</applet>*/
+public class FloodFill extends Applet implements MouseListener
 {
 	Color m_objSelectedColor = Color.blue;
 	int fillColor = 0xff0000ff;
@@ -46,13 +50,13 @@ public class Floodfill extends Applet implements MouseListener
         add(partial);
         add(full);
         
-        try 
+        try
         {
-			m_objShape = ImageIO.read(Floodfill.class.getResourceAsStream("Untitled.png"));
+			m_objShape = ImageIO.read(FloodFill.class.getResourceAsStream("Untitled.png"));
 			tracker.addImage(m_objShape, 100);
 			tracker.waitForAll();
-		} 
-        catch (Exception e1) 
+		}
+        catch (Exception e1)
         {
 		}
 		
@@ -121,15 +125,15 @@ public class Floodfill extends Applet implements MouseListener
 	void RecursiveFill( int x, int y, int w, int h, Graphics canvas )
 	{
 		if( x > w || y > h || x < 0 || y < 0 ) return;
-		if( GetPixel(x,y) != startColor ) return;		
-		if( startColor == fillColor ) return;
+		if( GetPixel(x,y) != startColor ) return;
+		//if( startColor == fillColor ) return;
 		
-		SetPixel( x,y, fillColor ); 
+		SetPixel( x,y, fillColor );
 		repaint();
-		RecursiveFill( x-1,y, startColor, fillColor, canvas );
-		RecursiveFill( x+1,y, startColor, fillColor, canvas );
-		RecursiveFill( x,y-1, startColor, fillColor, canvas );
-		RecursiveFill( x,y+1, startColor, fillColor, canvas );
+		RecursiveFill( x-1,y, w, h, canvas );
+		RecursiveFill( x+1,y, w, h, canvas );
+		RecursiveFill( x,y-1, w, h, canvas );
+		RecursiveFill( x,y+1, w, h, canvas );
 	}
 	
 	int m_nStartX, m_nStartY, startColor;
@@ -154,74 +158,54 @@ public class Floodfill extends Applet implements MouseListener
 	
 	void FloodFill( int x, int y, int w, int h, Graphics canvas )
 	{
-		if( xx<w && xx>0 && y<h && y>0 ) return;
+		if( x>w || x<0 || y>h || y<0 ) return;
 		if( GetPixel(x,y) != startColor ) return;
+	  System.out.print("a");
 
-		SetPixel( x,y, fillColor ); 
+    startColor = GetPixel(x,y);
+		//SetPixel( x,y, fillColor );
 		repaint();
 		
 		int xx = x;
 		int left=x, right=x;
 		
-		while( (xx<w && xx>0 && y<h && y>0) && GetPixel(xx, y) == startColor ){	
-			SetPixel( xx,y, fillColor );
-			x++;
+		System.out.print( (xx<w && xx>0 && y<h && y>0) );
+		while( (xx<w && xx>0 && y<h && y>0) && GetPixel(xx, y) == startColor ){
+			SetPixel( xx++,y, fillColor ); repaint();
 			right = xx;
-		}	
+		}
 		
+		System.out.println(",");
 		xx = x-1;
 		while( (xx<w && xx>0 && y<h && y>0) && GetPixel(xx, y) == startColor ){
-			SetPixel(xx, y, fillColor);
-			x--;
+			SetPixel(xx--, y, fillColor); repaint();
 			left=xx;
 		}
-		repaint();
+		System.out.println( left +" "+ right );
 		for( xx=left ; xx<right; xx++ ){
-			FloodFill( xx,y-1, startColor, fillColor, canvas );
-			FloodFill( xx,y+1, startColor, fillColor, canvas );
+			FloodFill( xx,y-1, w, h, canvas );
+			FloodFill( xx,y+1, w, h, canvas );
 		}
 
-	/*	repaint();
-		
-		if( )
-		sc = getpixel x y 
-
-		xx = x 
-		while xx is still in bounds and getpixel xx,y is sc 
-
-			setpixel xx y fc 
-			xx++ 
-			right = xx 
-
-		xx = x - 1 
-		while xx is still in bounds and getpixel xx,y is sc 
-			setpixel xx y fc 
-			xx-- 
-			left = xx 
-
-		count xx from left to right 
-		Fill xx y - 1 fc sc 
-		Fill xx y + 1 fc sc
-	*/ 		
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent ms) 
+	public void mouseClicked(MouseEvent ms)
 	{
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) 
+	public void mouseEntered(MouseEvent arg0)
 	{
 	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) 
+	public void mouseExited(MouseEvent arg0)
 	{
 	}
 
 	@Override
-	public void mousePressed(MouseEvent ms) 
+	public void mousePressed(MouseEvent ms)
 	{
 		if( ms.getX() >= m_nUpperLeftX &&
 				ms.getY() >= m_nUpperLeftY &&
@@ -253,8 +237,11 @@ public class Floodfill extends Applet implements MouseListener
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) 
+	public void mouseReleased(MouseEvent arg0)
 	{
 	}
 	
+	public static void main(String[] args){
+	  
+	}
 }
